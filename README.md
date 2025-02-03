@@ -1,2 +1,2 @@
-# Introduction-to-scDDI
+# Introduction-to-scDDI(Darmanis data)
 A novel Imputation method
