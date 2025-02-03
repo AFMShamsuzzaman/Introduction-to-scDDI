@@ -61,24 +61,34 @@ library(scDoc)
 ```
 Now, calculate dropout probabilty matrix and cell-to-cell similarity matrix as follows :
 
-     offsets_darmanis <- as.numeric(log(colSums(darmanis_process)))
-     dp_darmanis <- prob.dropout(input = darmanis_process, offsets = offsets_darmanis, mcore = 6)  ## dp_darmanis is the dropout probability matrix
-     sim_darmanis <- sim.calc(log2(count_darmanis+1), dp_darmanis)   ## sim_darmanis is the cell-to-cell similarity matrix
+offsets_darmanis <- as.numeric(log(colSums(darmanis_process)))
+dp_darmanis <- prob.dropout(input = darmanis_process, offsets = offsets_darmanis, mcore = 6)  ## dp_darmanis is the dropout probability matrix
+sim_darmanis <- sim.calc(log2(count_darmanis+1), dp_darmanis)   ## sim_darmanis is the cell-to-cell similarity matrix
 ```
 
 ## Saving the results
 
 Then, save the processed dataset, dropout probability matrix and cell-to-cell similarity matrix into csv file fromat. 
 
-    write.csv(darmanis_process,"/home/zaman/New2/darmanis_process.csv",row.names = FALSE)
-    write.csv(dp_darmanis,"/home/zaman/New2/dp_darmanis.csv",row.names = FALSE)
-    write.csv(sim_darmanis,"/home/zaman/New2/sim_darmanis.csv",row.names = FALSE)
+write.csv(darmanis_process,"/home/zaman/New2/darmanis_process.csv",row.names = FALSE)
+write.csv(dp_darmanis,"/home/zaman/New2/dp_darmanis.csv",row.names = FALSE)
+write.csv(sim_darmanis,"/home/zaman/New2/sim_darmanis.csv",row.names = FALSE)
 
 Or you can also simply run the Rscript file as follows:
 
-    Rscript Imputation.R
+Rscript Imputation.R
 
-## Clustering using selected feature
+
+## Usage of the Python functions 
+
+Now, Run the following python code to impute the given dataset as follows:
+
+python3 imputation_scDDI.py
+
+
+## Clustering of the imputed dataset and calculation of Adjusted Rand Index(ARI)
+    
+Then, to validate the results, we utilized clustering performance metrics, specifically the Adjusted Rand Index (ARI). We compared the ARI value for both unimputed dataset and as well as imputed dataset using scDDI.
 
 import libraries in python and importing the data
 
@@ -86,7 +96,24 @@ import libraries in python and importing the data
 import numpy as np
 import pandas as pd
 import scanpy as sc
-adata1=sc.read_csv('Renyid.csv', delimiter=',', first_column_names=None, dtype='float32')
+adata=sc.read_csv('darmanis_imputed.csv',delimiter=',', first_column_names=None, dtype='float32')
+      ```
+
+
+
+
+
+
+
+
+
+
+
+
+      
+Now,we visualized the clustering outcomes and analyzed the clusters to identify marker genes.
+
+    jupyter notebook marker_gene.ipynb
 ```
 
 Using PCA dimensionality reduction and Leiden clustering
