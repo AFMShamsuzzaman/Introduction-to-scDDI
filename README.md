@@ -33,12 +33,12 @@ Gene should be in row, Cells should be in coloumn
 
 
 ```
-preprocessedata= normalized_data(data)
+darmanis_process= normalized_data(data)
 
 ```
 
 ```
-dim(preprocessedata) 
+dim(darmanis_process) 
 [1] 8994    466
 
 preprocessedata[1:2,1:3]
@@ -57,42 +57,26 @@ Load the libraries
 ```
 library(foreach)
 library(doParallel)
+library(scDoc)
 ```
-Apply the feature (gene) selection using Renyi and Tsallis with preprocesse data and cell types. Default--- Core Number (p=20), q-values (q=0.7,0.3) , Number of genes to be selected (nf=500) 
+Now, calculate dropout probabilty matrix and cell-to-cell similarity matrix as follows :
 
-```
-RenyiFeadata=Renyifeature(data,cell,gene,p,q,nf)
-TsallisFeadata=Tsallisfeature(data,cell,gene,p,q,nf)
-
-```
-
-The  Reduced Darmanis data using Renyi entropy
-
-```
-dim(RenyiFeadata)
-[1] 466  500
-RenyiFeadata[1:2,1:3]
-              BRD7P3 MEX3A TMSB15A
-astrocytes  2.749929     0       0
-endothelial 0.000000     0       0
+     offsets_darmanis <- as.numeric(log(colSums(darmanis_process)))
+     dp_darmanis <- prob.dropout(input = darmanis_process, offsets = offsets_darmanis, mcore = 6)  ## dp_darmanis is the dropout probability matrix
+     sim_darmanis <- sim.calc(log2(count_darmanis+1), dp_darmanis)   ## sim_darmanis is the cell-to-cell similarity matrix
 ```
 
-The  Reduced Darmanis data using Tsallis entropy
-
-```
-dim(TsallisFeadata)
-[1] 466  500
-TsallisFeadata[1:2,1:3]
-              PCP4     DDX5      A2M
-astrocytes     0 4.095699 0.000000
-endothelial    0 5.816251 4.955909
-```
 ## Saving the results
 
-```
-write.csv(TsallisFeadata, file="Tsallisd.csv")
-write.csv(RenyiFeadata, file="Renyid.csv.csv")
-```
+Then, save the processed dataset, dropout probability matrix and cell-to-cell similarity matrix into csv file fromat. 
+
+    write.csv(darmanis_process,"/home/zaman/New2/darmanis_process.csv",row.names = FALSE)
+    write.csv(dp_darmanis,"/home/zaman/New2/dp_darmanis.csv",row.names = FALSE)
+    write.csv(sim_darmanis,"/home/zaman/New2/sim_darmanis.csv",row.names = FALSE)
+
+Or you can also simply run the Rscript file as follows:
+
+    Rscript Imputation.R
 
 ## Clustering using selected feature
 
