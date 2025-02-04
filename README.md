@@ -34,7 +34,6 @@ Gene should be in row, Cells should be in coloumn
 
 ```
 darmanis_process= normalized_data(data)
-
 ```
 
 ```
