@@ -93,7 +93,7 @@ python3 imputation_scDDI.py
     
 Then, to validate the results, we utilized clustering performance metrics, specifically the Adjusted Rand Index (ARI). We compared the ARI value for both unimputed dataset and as well as imputed dataset using scDDI.
 
-import libraries in python and importing the data
+Import libraries in python and importing the data
 
 ```
 import numpy as np
@@ -118,7 +118,7 @@ sc.pl.pca_variance_ratio(adata, log=True)
 ```
 <img src="./pca_darmanis.jpg">
 
-create neighborhood graph using 20 pcs and dimension reduction using umap
+Create neighborhood graph using 20 pcs and dimension reduction using umap
 ```
 sc.pp.neighbors(adata, n_neighbors=15, n_pcs=30)
 sc.tl.umap(adata)
@@ -129,7 +129,7 @@ sc.tl.umap(adata)
 #sc.pl.umap(adata2, color=['leiden'])
 ```
 
-visualizing clusters
+Visualizing clusters
 ```
 import leidenalg
 sc.tl.leiden(adata)
