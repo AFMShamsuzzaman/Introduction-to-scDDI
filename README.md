@@ -86,7 +86,7 @@ Rscript Imputation.R
 Now, Run the following python code to impute the given dataset as follows:
 
 ```
-      python3 imputation_scDDI.py
+python3 imputation_scDDI.py
 ```
 
 ## Clustering of the imputed dataset and calculation of Adjusted Rand Index(ARI)
@@ -102,115 +102,56 @@ import scanpy as sc
 adata=sc.read_csv('darmanis_imputed.csv',delimiter=',', first_column_names=None, dtype='float32')
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-      
-Now,we visualized the clustering outcomes and analyzed the clusters to identify marker genes.
-
-    jupyter notebook marker_gene.ipynb
+Now filter with minimum 200 genes and 3 cells
+```
+sc.pp.filter_cells(adata, min_genes=200)
+sc.pp.filter_genes(adata, min_cells=3)
+sc.pp.normalize_total(adata, target_sum=1e4)
+sc.pp.log1p(adata)
+sc.pp.scale(adata, max_value=10)
 ```
 
 Using PCA dimensionality reduction and Leiden clustering
-
 ```
-sc.tl.pca(adata1, svd_solver='arpack')
-sc.pl.pca_variance_ratio(adata1,n_pcs=20,log=True)
+sc.tl.pca(adata, svd_solver='arpack')
+sc.pl.pca_variance_ratio(adata, log=True)
 ```
 <img src="./pca_darmanis.png">
 
-
+create neighborhood graph using 20 pcs and dimension reduction using umap
 ```
-#create neighborhood graph using 20 pcs 
-sc.pp.neighbors(adata1, n_neighbors=15, n_pcs=20)
-##dim reduction using umap
-sc.tl.umap(adata1)
+sc.pp.neighbors(adata, n_neighbors=15, n_pcs=30)
+sc.tl.umap(adata)
 #Leiden clustering
-import leidenalg
-sc.tl.leiden(adata1)
+#import leidenalg
+#sc.tl.leiden(adata2)
 ##visualizing clusters
-sc.pl.umap(adata1, color=['leiden'])
+#sc.pl.umap(adata2, color=['leiden'])
+```
+
+visualizing clusters
+```
+import leidenalg
+sc.tl.leiden(adata)
+sc.pl.umap(adata, color=['leiden'])
 ```
 <img src="./cluster_darmanis.png">
 
-save the clustering results
 
+Now calculate silhouette_score
 ```
-pd.DataFrame(adata1.obs).to_csv("darmanis_leiden.csv")
-```
-
-
-## Marker selection form identified clusters
-
-Compute a ranking for the highly differential genes in each cluster using Wilcoxon-RankSum test
-
-```
-sc.tl.rank_genes_groups(adata1, 'leiden', method='wilcoxon',key_added = "wilcoxon")
-sc.pl.rank_genes_groups(adata1, n_genes=30, sharey=False,key="wilcoxon")
+from sklearn.metrics import silhouette_samples, silhouette_score
+sil = silhouette_score(adata.X, adata.obs['leiden'],metric='euclidean')
+sil
 ```
 
-<img src="./wilcox_darmanis.png">
-
-Top 10 DE genes for each cluster using Wilcox-Ranksum Test
-
+Now, calculate Adjusted Rand Index
 ```
-#save top 10 DE genes for each cluster using wilcox-ranksum test
-result = adata1.uns['wilcoxon']
-groups = result['names'].dtype.names
-p=pd.DataFrame(
-    {group + '_' + key[:1]: result[key][group]
-    for group in groups for key in ['names', 'pvals']}).head(10)
-pd.DataFrame(p).to_csv("darmanis_marker.csv")
-```
-Visualizing top 5 DE genes for each cluster in a heatmap using wilcox results
-
-```
-sc.pl.rank_genes_groups_heatmap(adata1, n_genes=5, key="wilcoxon", groupby="leiden", show_gene_labels=True)
-```
-<img src="./heat_darmanis.png">
-
-Visualizing top 5 DE genes for each cluster in a dotplot using t-test results. Here color of dot represents mean expression of the gene in those cell, dot size represents fraction of cells expressing a gene  
-
-```
-sc.pl.rank_genes_groups_dotplot(adata1, n_genes=5, key="wilcoxon", groupby="leiden")
-```
-<img src="./dotplot_darmanis.png">
-
-Visualizing top 5 DE genes for each cluster in a stacked violin plot using t-test results 
-
-```
-sc.pl.rank_genes_groups_stacked_violin(adata1, n_genes=5, key="wilcoxon", groupby="leiden")
-```
-<img src="./violin_darmanis.png">
-
-Visualizing top 5 DE genes for each cluster in a matrixplot using wilcox results. matrixplot represents mean expression of a gene in a cluster as a heatmap.
-
-```
-sc.pl.rank_genes_groups_matrixplot(adata1, n_genes=5, key="wilcoxon", groupby="leiden")
-```
-<img src="./heat2_darmanis.png">
-
-Showing expression of some marker genes (e.g VIP,DCX) across Leiden groups
-
-```
-sc.pl.violin(adata1, ['VIP'], groupby='leiden')
-```
-<img src="./VIP_darmanis.png">
-
-```
-sc.pl.violin(adata1, ['DCX'], groupby='leiden')
-```
-<img src="./dcx_darmanis.png">
-
-
-
-
-
+import pandas as pd
+import numpy as np
+from sklearn import metrics
+l1=np.genfromtxt('darmanis_annotation.csv',dtype=None, delimiter=",")
+l2=adata.obs['leiden']
+ari=metrics.adjusted_rand_score(l1,l2)
+ari
+```    
