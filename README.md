@@ -116,7 +116,7 @@ Using PCA dimensionality reduction and Leiden clustering
 sc.tl.pca(adata, svd_solver='arpack')
 sc.pl.pca_variance_ratio(adata, log=True)
 ```
-<img src="./pca_darmanis.png">
+<img src="./pca_darmanis.jpg">
 
 create neighborhood graph using 20 pcs and dimension reduction using umap
 ```
@@ -135,7 +135,7 @@ import leidenalg
 sc.tl.leiden(adata)
 sc.pl.umap(adata, color=['leiden'])
 ```
-<img src="./cluster_darmanis.png">
+<img src="./cluster_darmanis.jpg">
 
 
 Now calculate silhouette_score
