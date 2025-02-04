@@ -49,7 +49,6 @@ AAAS 1.526881 0.000000 0.000000
 
 A total of 466 cells and 8994 genes are remaining in the dataset after cell, gene filtering, and Normalization.
 
-
 ## Calculation of dropout probability matrix and cell-to-cell similarity matrix
 
 Load the libraries
@@ -58,12 +57,13 @@ Load the libraries
 library(foreach)
 library(doParallel)
 library(scDoc)
-```
-Now, calculate dropout probabilty matrix and cell-to-cell similarity matrix as follows :
 
-      offsets_darmanis <- as.numeric(log(colSums(darmanis_process)))
-      dp_darmanis <- prob.dropout(input = darmanis_process, offsets = offsets_darmanis, mcore = 6)  ## dp_darmanis is the dropout probability matrix
-      sim_darmanis <- sim.calc(log2(count_darmanis+1), dp_darmanis)   ## sim_darmanis is the cell-to-cell similarity matrix
+```
+## Now, calculate dropout probabilty matrix and cell-to-cell similarity matrix as follows :
+
+offsets_darmanis <- as.numeric(log(colSums(darmanis_process)))
+dp_darmanis <- prob.dropout(input = darmanis_process, offsets = offsets_darmanis, mcore = 6)  ## dp_darmanis is the dropout probability matrix
+sim_darmanis <- sim.calc(log2(count_darmanis+1), dp_darmanis)   ## sim_darmanis is the cell-to-cell similarity matrix
 ```
 
 
