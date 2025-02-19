@@ -93,6 +93,7 @@ plt.title("Decision Tree Structure for Gene Expression Imputation")
 plt.show()
 ```
 <img src="./decision.jpg">
+
 # Scatter plot for Real vs Imputed values
 ```
 plt.figure(figsize=(8, 5))
@@ -105,7 +106,9 @@ plt.title("Decision Tree Regression for Gene Expression Imputation")
 plt.legend()
 plt.show()
 ```
+
 <img src="./decision1.jpg">
+
 
 ## Clustering of the imputed dataset and calculation of Adjusted Rand Index(ARI)
     
