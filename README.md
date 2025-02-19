@@ -85,6 +85,28 @@ Now, Run the following python code to impute the given dataset as follows:
 python3 imputation_scDDI.py
 ```
 
+## Here, after drop out detection and finding the gene expressions of the similar cells, imputation is done wit the help of decisaion tree regression.
+```
+# Visualization of Decision Tree Structure
+plt.figure(figsize=(15, 8))
+plot_tree(regressor, filled=True, feature_names=["Cell Index"], rounded=True)
+plt.title("Decision Tree Structure for Gene Expression Imputation")
+plt.show()
+<img src="./decision.jpg">
+
+# Scatter plot for Real vs Imputed values
+plt.figure(figsize=(8, 5))
+plt.scatter(X_test[:-1], y_test[:-1], color='red', label="Real Values")
+plt.scatter(X_test[:-1], y_pred[:-1], color='blue', marker='x', label="Imputed Values")
+plt.plot(np.sort(X_test[:-1], axis=0), regressor.predict(np.sort(X_test[:-1], axis=0)), color='green', linestyle="dashed", label="Regression Fit")
+plt.xlabel("Cell Index")
+plt.ylabel("Gene Expression Value")
+plt.title("Decision Tree Regression for Gene Expression Imputation")
+plt.legend()
+plt.show()
+<img src="./decision1.jpg">
+```
+
 ## Clustering of the imputed dataset and calculation of Adjusted Rand Index(ARI)
     
 Then, to validate the results, we utilized clustering performance metrics, specifically the Adjusted Rand Index (ARI). We compared the ARI value for both unimputed dataset and as well as imputed dataset using scDDI.
