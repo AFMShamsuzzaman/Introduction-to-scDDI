@@ -93,8 +93,10 @@ plot_tree(regressor, filled=True, feature_names=["Cell Index"], rounded=True)
 plt.title("Decision Tree Structure for Gene Expression Imputation")
 plt.show()
 <img src="./decision.jpg">
+```
 
 # Scatter plot for Real vs Imputed values
+```
 plt.figure(figsize=(8, 5))
 plt.scatter(X_test[:-1], y_test[:-1], color='red', label="Real Values")
 plt.scatter(X_test[:-1], y_pred[:-1], color='blue', marker='x', label="Imputed Values")
