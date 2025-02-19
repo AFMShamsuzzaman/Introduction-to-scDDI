@@ -84,10 +84,9 @@ Now, Run the following python code to impute the given dataset as follows:
 ```
 python3 imputation_scDDI.py
 ```
-
-## Here, after drop out detection and finding the gene expressions of the similar cells, imputation is done wit the help of decisaion tree regression.
-```
 # Visualization of Decision Tree Structure
+Here, after drop out detection and finding the gene expressions of the similar cells, imputation is done wit the help of decisaion tree regression.
+```
 plt.figure(figsize=(15, 8))
 plot_tree(regressor, filled=True, feature_names=["Cell Index"], rounded=True)
 plt.title("Decision Tree Structure for Gene Expression Imputation")
