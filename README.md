@@ -156,7 +156,7 @@ import leidenalg
 sc.tl.leiden(adata)
 sc.pl.umap(adata, color=['leiden'])
 ```
-<img src="./cluster_darmanis.jpg">
+<img src="./clustering_darmanis.jpg">
 
 
 Now calculate silhouette_score
