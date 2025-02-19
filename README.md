@@ -163,7 +163,6 @@ Now calculate silhouette_score
 ```
 from sklearn.metrics import silhouette_samples, silhouette_score
 sil = silhouette_score(adata.X, adata.obs['leiden'],metric='euclidean')
-sil
 ```
 
 Now, calculate Adjusted Rand Index
@@ -174,5 +173,4 @@ from sklearn import metrics
 l1=np.genfromtxt('darmanis_annotation.csv',dtype=None, delimiter=",")
 l2=adata.obs['leiden']
 ari=metrics.adjusted_rand_score(l1,l2)
-ari
 ```    
